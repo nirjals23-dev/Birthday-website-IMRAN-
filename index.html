@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Imran!</title>
+    <style>
+        /* ============================
+           CSS STYLES
+           ============================ */
+        
+        /* General Page Styling */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Dancing+Script:wght@700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            height: 100vh;
+            overflow: hidden; /* Prevents scrolling for app-like feel */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        /* The Main Container (Phone screen look) */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 800px;
+            background: rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 0;
+        }
+
+        @media (min-width: 500px) {
+            .container {
+                height: 90vh;
+                border-radius: 20px;
+            }
+        }
+
+        /* Pages logic */
+        .page {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .page.active {
+            display: flex; /* Only active page is shown */
+        }
+
+        /* Typography */
+        h1, h2 {
+            color: #6a11cb;
+            margin-bottom: 10px;
+        }
+        
+        .script-font {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #d63384;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #2575fc;
+        }
+
+        /* Images & Placeholders */
+        .image-area {
+            width: 200px;
+            height: 200px;
+            background-color: #eee;
+            border-radius: 15px;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #6a11cb;
+            object-fit: cover;
+        }
+
+        /* PAGE 2: Gift Box Animation */
+        .gift-box {
+            font-size: 5rem;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* PAGE 3: Cake & Candle CSS Only Drawing */
+        .cake-container {
+            position: relative;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            cursor: pointer;
+        }
+        
+        .cake-base {
+            width: 200px;
+            height: 100px;
+            background: #f8a5c2;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+        }
+        
+        .cake-base::before {
+            content: '';
+            position: absolute;
+            background: #f78fb3;
+            width: 100%;
+            height: 20px;
+            top: 30px;
+        }
+
+        .candle {
+            width: 15px;
+            height: 60px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 5px, #74b9ff 5px, #74b9ff 10px);
+            position: absolute;
+            bottom: 100px; /* on top of base */
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+
+        .flame {
+            width: 15px;
+            height: 25px;
+            background: #ff9f43;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -25px;
+            left: 0;
+            box-shadow: 0 0 10px #ff9f43, 0 0 20px #ff9f43;
+            animation: flicker 0.5s infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #999;
+            opacity: 0;
+            transition: opacity 1s, top 2s;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Candle Blown State */
+        .candle.off .flame {
+            display: none;
+        }
+        .candle.off .smoke {
+            opacity: 1;
+            top: -80px;
+        }
+
+        /* Message Revealer */
+        .hidden-message {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+        .show-message {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Nirjal's Note */
+        .personal-note {
+            background: #fff0f6;
+            padding: 15px;
+            border-left: 4px solid #d63384;
+            font-style: italic;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        /* Last Pages Hearts */
+        .heart-beat {
+            color: #e84393;
+            font-size: 6rem;
+            animation: beat 1.2s infinite;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- PAGE 1: Welcome / Introduction -->
+        <div id="page-1" class="page active">
+            <h1 class="script-font">Happy Birthday!</h1>
+            
+            <div class="avatar-group">
+                <!-- CUSTOMIZE: Replace src with Nirjal's photo -->
+                <img src="https://ui-avatars.com/api/?name=Nirjal&background=0D8ABC&color=fff" alt="Nirjal" class="avatar">
+                <!-- CUSTOMIZE: Replace src with Imran's photo -->
+                <img src="https://ui-avatars.com/api/?name=Imran&background=6a11cb&color=fff" alt="Imran" class="avatar">
+            </div>
+
+            <h2>Hey Imran!</h2>
+            <p>Welcome to your special day. Since we are best friends, I wanted to create something small but meaningful for you.</p>
+            <p>Ready to see what's inside?</p>
+            
+            <button class="btn" onclick="goToPage('page-2')">Let's Go!</button>
+        </div>
+
+
+        <!-- PAGE 2: The Gift -->
+        <div id="page-2" class="page">
+            <h2>I found something...</h2>
+            
+            <!-- Gift Animation -->
+            <div class="gift-box" onclick="goToPage('page-3')">??</div>
+            
+            <p>There is a little surprise waiting for you inside this box.</p>
+            <p style="font-size: 0.9rem; opacity: 0.7;">(Tap the gift box to open)</p>
+        </div>
+
+
+        <!-- PAGE 3: Cake Interaction -->
+        <div id="page-3" class="page">
+            <h2 class="script-font">Make a Wish</h2>
+            
+            <div class="cake-container" onclick="blowCandle()">
+                <div class="cake-base"></div>
+                <div id="candle" class="candle">
+                    <div class="flame"></div>
+                    <div class="smoke">??</div>
+                </div>
+            </div>
+
+            <p id="instruction-text">Tap the candle to blow it out!</p>
+
+            <div id="wish-message" class="hidden-message">
+                <h3>? May God bless you ?</h3>
+                <p>"Your wish will be fulfilled this year."</p>
+                
+                <!-- NOTE FROM NIRJAL -->
+                <div class="personal-note">
+                    <strong>Note from Nirjal:</strong><br>
+                    "Imran, thanks for always being there. You aren't just a friend, you're a brother. Have a blast!"
+                </div>
+
+                <button class="btn" onclick="goToPage('page-4')">Continue</button>
+            </div>
+        </div>
+
+
+        <!-- PAGE 4: Surprise Teaser -->
+        <div id="page-4" class="page">
+            <h2>A surprise is coming...</h2>
+            
+            <div class="image-area">
+                <!-- CUSTOMIZE: Replace with a photo of you two together -->
+                <img src="https://dummyimage.com/400x400/6a11cb/fff&text=Imran+&+Nirjal" alt="Us Together">
+            </div>
+
+            <p>"Remember this time? Just one of many great memories."</p>
+            <p>I really hope you like this digital gift.</p>
+
+            <button class="btn" onclick="goToPage('page-5')">One last thing...</button>
+        </div>
+
+
+        <!-- PAGE 5: Second Last -->
+        <div id="page-5" class="page">
+            <p style="font-style: italic; color: #888;">This drawing is not complete yet...</p>
+            
+            <h1 style="font-size: 3rem; margin: 40px 0;">THANK YOU</h1>
+            
+            <div style="font-size: 2rem;">?? ? ??</div>
+
+            <button class="btn" onclick="goToPage('page-6')">Finish</button>
+        </div>
+
+
+        <!-- PAGE 6: Ending -->
+        <div id="page-6" class="page">
+            <div class="heart-beat">??</div>
+            
+            <h2 class="script-font" style="margin-top: 30px;">Love you, man.</h2>
+            
+            <p>Thank you for visiting, Imran.</p>
+            <p>Hope this year brings you everything you deserve.</p>
+            
+            <small style="margin-top: 50px; display: block; opacity: 0.6;">Created by Nirjal</small>
+        </div>
+
+    </div>
+
+    <!-- ============================
+         JAVASCRIPT LOGIC
+         ============================ -->
+    <script>
+        // Function to switch between pages
+        function goToPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show specific page
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+
+        // Function for Candle Interaction (Page 3)
+        function blowCandle() {
+            const candle = document.getElementById('candle');
+            const instruction = document.getElementById('instruction-text');
+            const message = document.getElementById('wish-message');
+
+            // Check if already blown
+            if (!candle.classList.contains('off')) {
+                // Add class to remove flame and show smoke
+                candle.classList.add('off');
+                
+                // Change text
+                instruction.style.opacity = '0';
+                
+                // Show the hidden message after a short delay
+                setTimeout(() => {
+                    message.classList.add('show-message');
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
